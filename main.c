@@ -1,21 +1,15 @@
 // Sudoku Guesser
 //#include <stdlib.h>
 #include <stdio.h>
+#include "header.h"
 
-// Determines whether the given row is a valid row (each number is unique)
-// Returns 0 if invalid, and !0 if valid
-int validRow(int rowNum, int sudoku[9][9]);
-// Determines whether the given col is a valid col (each number is unique)
-int validCol(int colNum, int sudoku[9][9]);
-// Determines whether the given square is a valid square (each number is unique)
-int validSquare(int squareNum, int sudoku[9][9]);
-
-// Determines what values can be inserted into the row keeping it valid
-int remainingInRow(int rowNum, int * remArray, int sudoku[9][9]);
-// Determines what values can be inserted into the col keeping it valid
-int remainingInCol(int colNum, int * remArray, int sudoku[9][9]);
-// Determines what values can be inserted into the square keeping it valid
-int remainingInSquare(int squareNum, int * remArray, int sudoku[9][9]);
+// fills every value in a size 9 array to -1;
+void clearArray(int * array) {
+    for (int i = 0; i < 9; ++i)
+    {
+        array[i] = -1;
+    }
+}
 
 int main(int argc, char const *argv[]) {
     int sudoku[9][9];
@@ -75,57 +69,38 @@ int main(int argc, char const *argv[]) {
         }
     }
 
+    printf("--------------------\n");
+    printf("-------(0, 0)-------\n");
+    int rowRem[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+    int colRem[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+    int squareRem[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+    int commonRem[9] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+
+    remainingInRow(1, rowRem, sudoku);
+    remainingInCol(0, colRem, sudoku);
+    remainingInSquare(0, squareRem, sudoku);
+    intersectionValidValues(commonRem, rowRem, colRem, squareRem);
+
+    for (int i = 0; i < 9; ++i) {
+        if (rowRem[i] == -1) break;
+        printf("%d ", rowRem[i]);
+    }
+    printf("\n");
+    for (int i = 0; i < 9; ++i) {
+        if (colRem[i] == -1) break;
+        printf("%d ", colRem[i]);
+    }
+    printf("\n");
+    for (int i = 0; i < 9; ++i) {
+        if (squareRem[i] == -1) break;
+        printf("%d ", squareRem[i]);
+    }
+    printf("\n");
+    for (int i = 0; i < 9; ++i) {
+        if (commonRem[i] == -1) break;
+        printf("%d ", commonRem[i]);
+    }
+    printf("\n");
+
     return 0;
-}
-
-int validRow(int rowNum, int sudoku[9][9]) {
-    int found[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-    for (int i = 0; i < 9; ++i) {
-        if (sudoku[rowNum][i]) {
-            if (found[sudoku[rowNum][i] - 1]) {
-                return 0;
-            } else {
-                found[sudoku[rowNum][i] - 1] = 1;
-            }
-        }
-    }
-
-    return 1;
-}
-
-int validCol(int colNum, int sudoku[9][9]) {
-    int found[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-    for (int i = 0; i < 9; ++i) {
-        if (sudoku[i][colNum]) {
-            if (found[sudoku[i][colNum] - 1]) {
-                return 0;
-            } else {
-                found[sudoku[i][colNum] - 1] = 1;
-            }
-        }
-    }
-
-    return 1;
-}
-
-int validSquare(int squareNum, int sudoku[9][9]) {
-    int found[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-    int baseX = squareNum % 3 * 3;
-    int baseY = squareNum / 3 * 3;
-
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            if (sudoku[baseX + i][baseY + j]) {
-                if (found[sudoku[baseX + i][baseY + j]-1]) {
-                    return 0;
-                } else {
-                    found[sudoku[baseX+i][baseY+j] - 1] = 1;
-                }
-            }
-        }
-    }
-    return 1;
 }
