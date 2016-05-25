@@ -15,3 +15,6 @@ void remainingInSquare(int squareNum, int * remArray, int sudoku[9][9]);
 
 // This finds all common values that are valid in the grid tile's square, column and row
 void intersectionValidValues(int * remArray, int * rowValues, int * colValues, int * squareValues);
+
+// Backtrack function, will return a 0 if the insert failed or a non zero if it was successful
+int backtrack(int row, int col, int sudoku[9][9]);
