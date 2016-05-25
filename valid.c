@@ -33,8 +33,8 @@ int validCol(int colNum, int sudoku[9][9]) {
 int validSquare(int squareNum, int sudoku[9][9]) {
     int found[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-    int baseX = squareNum % 3 * 3;
-    int baseY = squareNum / 3 * 3;
+    int baseRow = squareNum / 3 * 3;
+    int baseCol = squareNum % 3 * 3;
 
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
